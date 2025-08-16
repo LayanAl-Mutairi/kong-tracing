@@ -13,7 +13,7 @@ All traffic is routed through **Kong**, which captures distributed traces and se
 
 ## Architecture
 
-   ![Diagram showing request flow through Kong, API1 with manual tracing, API2 with Kong-only tracing, ending in Jaeger](diagram.png)
+![Diagram showing request flow](diagram.png)
 
 - **Kong Gateway**: Routes requests to APIs and captures traces.
 - **API1**: Contains multiple **manual spans** for:
