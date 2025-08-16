@@ -1,0 +1,21 @@
+_format_version: "2.1"
+
+services:
+  - name: api1
+    url: http://api1:5001
+    routes:
+      - name: api1-route
+        paths: ["/api1"]
+
+  - name: api2
+    url: http://api2:5002
+    routes:
+      - name: api2-route
+        paths: ["/api2"]
+
+plugins:
+  - name: opentelemetry
+    config:
+      endpoint: "http://jaeger:4318/v1/traces"
+      resource_attributes:
+        service.name: "kong-gateway"

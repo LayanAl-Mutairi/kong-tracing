@@ -1,0 +1,45 @@
+
+
+services:
+  kong:
+    image: kong:3.5
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_TRACING_INSTRUMENTATIONS: "all"
+      KONG_TRACING_SAMPLING_RATE: 1.0
+      KONG_TRACING_SERVICE_NAME: "kong-gateway"
+    volumes:
+      - ./kong.yml:/kong.yml
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    depends_on:
+      - api1
+      - api2
+      - jaeger
+
+  api1:
+    build:
+      context: ./api1_manual_tracing
+      dockerfile: Dockerfile
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4318/v1/traces"
+    ports:
+      - "5001:5001"
+
+  api2:
+    build:
+      context: ./api2_no_tracing
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.54
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP
