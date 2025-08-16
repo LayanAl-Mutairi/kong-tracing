@@ -27,7 +27,6 @@ All traffic is routed through **Kong**, which captures distributed traces and se
 ---
 
 ## Installation
-
 1. Clone the repository:
 
 ```bash
@@ -43,9 +42,14 @@ docker-compose up --build
  API1: http://localhost:8000/api1/order
  API2: http://localhost:8000/api2/hello
 
-4. Open Jaeger UI to see traces:
- http://localhost:16686
+4. Manual Tracing only (bypassing Kong):
+ API1 direct: http://localhost:5001/order
+Any request here will generate only the Manual Tracing in Jaeger, without the Automatic Tracing from Kong.
 
+5. Open Jaeger UI to see traces:
+ http://localhost:16686
+Kong Automatic Tracing: appears in Jaeger under the service name:kong-gateway
+API1 Manual Tracing: appears under the service name:api1-service
 ---
 
 ## Example Manual Trace (API1)
